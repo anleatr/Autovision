@@ -9,6 +9,7 @@ cd
 pip install -i requirements.txt
 ```
 3. 登录到要刷的课程界面，把下面这个小机器人拖到上面，不要遮挡目录信息
+
 ![](./fig/robot.png)
 4. 在ide启动脚本，然后切换到课程界面，就可以去睡觉了
 
