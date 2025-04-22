@@ -106,6 +106,7 @@ def mid_check():
     curr_page = np.array(curr_page)
     curr_page = cv2.cvtColor(curr_page, cv2.COLOR_RGB2BGR)
     button = cv2.imread("./template/button.png")
+    button_for_multi = cv2.imread("./template/button_for_multi.png")
     popup_win = cv2.imread("./template/shutdown.png")
 
     # 在当前页面匹配
@@ -118,11 +119,17 @@ def mid_check():
     else:
         # 如果有弹窗，需要做一个选择题
         # 防止有多选题，需要把每个选项都点一遍
+        """这部分写的有点草率了，可以优化一下"""
         print("检测到弹窗，正在摧毁目标")
         result1 = cv2.matchTemplate(curr_page, button, cv2.TM_CCOEFF_NORMED)  # 返回的是一个掩码
         threshold1 = 0.8
         rows1, cols1 = np.where(result1 >= threshold1)  # rows:[], cols: []
         coordinates = list(zip(cols1,rows1))
+
+        if len(rows1)==0:   # 有多选
+            result1 = cv2.matchTemplate(curr_page, button_for_multi, cv2.TM_CCOEFF_NORMED)
+            rows1, cols1 = np.where(result1 >= threshold1)  # rows:[], cols: []
+            coordinates = list(zip(cols1, rows1))
 
         for idx,coordinate in enumerate(coordinates):
             pyautogui.moveTo(coordinate)
@@ -164,7 +171,7 @@ def main():
         click_start()
         while True:
             mid_check()
-            is_end = end_check()
+            is_end = end_check()    # 因为每门课结束标志不一样，可根据需要替换结束check的template
             if is_end:
                 time.sleep(2)
                 break
