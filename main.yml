@@ -1,0 +1,3 @@
+conda create -n autovision python=3.9
+cd
+pip install -i requirements.txt
